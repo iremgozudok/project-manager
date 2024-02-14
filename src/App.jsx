@@ -8,7 +8,26 @@ function App() {
   const [projectState, setProjectState] = useState({
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   });
+
+  function handleAddTask(text) {
+    setProjectState((prevState) => {
+      const taskId = Math.random();
+      const newTask = {
+        text: text,
+        projectId: prevState.selectedProjectId,
+        id: taskId,
+      };
+
+      return {
+        ...prevState,
+        tasks: [newTask, ...prevState.tasks],
+      };
+    });
+  }
+
+  function handleDeleteTask() {}
 
   function handleStartAddProject() {
     setProjectState((prevState) => {
@@ -72,7 +91,13 @@ function App() {
   );
 
   let content = (
-    <SelectedProject onDelete={handleDelete} project={selectedProject} />
+    <SelectedProject
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      onDelete={handleDelete}
+      project={selectedProject}
+      tasks={projectState.tasks}
+    />
   );
 
   if (projectState.selectedProjectId === null) {
